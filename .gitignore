@@ -1,0 +1,5 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Services/SPRD.LHD.MessageService/.vs/SPRD.LHD.MessageService/v15
