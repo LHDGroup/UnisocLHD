@@ -11,6 +11,17 @@
     <link href="~/Content/animate.css" rel="stylesheet" />
     <link href="~/Content/style.css" rel="stylesheet" />
     @RenderSection("css", true)
+    <style>
+        .btn-primary {
+            background-color: #910782;
+            border-color: #910782;
+            color: #FFFFFF;
+        }
+            .btn-primary.disabled, .btn-primary.disabled:hover, .btn-primary.disabled:focus, .btn-primary.disabled:active, .btn-primary.disabled.active, .btn-primary[disabled], .btn-primary[disabled]:hover, .btn-primary[disabled]:focus, .btn-primary[disabled]:active, .btn-primary.active[disabled], fieldset[disabled] .btn-primary, fieldset[disabled] .btn-primary:hover, fieldset[disabled] .btn-primary:focus, fieldset[disabled] .btn-primary:active, fieldset[disabled] .btn-primary.active {
+                background-color: #910782;
+                border-color: #910782;
+            }
+    </style>
 </head>
 <body data-ng-app="myApp">
     <div id="wrapper">
