@@ -19,8 +19,8 @@ namespace TestConsole
     {
         static void Main(string[] args)
         {
-            string osatID = "Ardentec";
-            FileInfo[] files = new DirectoryInfo(@"C:\LHD_APPLICATION\MessageCenter\Messages\" + osatID + @"\In\").GetFiles();
+            string osatID = "SPIL";
+            FileInfo[] files = new DirectoryInfo(@"D:\LHD_APPLICATION\MessageCenter\Messages\" + osatID + @"\In\").GetFiles();
             int num = 0;
             for (int i = 0; i <= (files.Length - 1); i++)
             {
@@ -30,21 +30,21 @@ namespace TestConsole
                 string str2 = FileService.ReadTextFile(info2.FullName);
                 int index = str2.IndexOf("{\"LOT_JUDGEMENT");
                 string jsonStr = str2.Substring(index, (str2.Length - index) - 1);
-                //Lot lot = LotService.ReadLotFromJson(osatID, jsonStr, messages);
-                //Console.WriteLine(osatID + messages);
-                //if (lot != null)
-                //{
-                //    LotService.SaveLotAndInformQA_AND_PE(lot);
-                //    //this.lblPrompt.Text = string.Format("{0} lots loaded", i + 1);
-                //}
-
-                Lot_TransformService lts = new Lot_TransformService();
-                Lot_Transformed lt = lts.ReadJson(jsonStr, messages);
-
-                if (lt != null)
+                Lot lot = LotService.ReadLotFromJson(osatID, jsonStr, messages);
+                Console.WriteLine(osatID + messages);
+                if (lot != null)
                 {
-                    lts.SaveCPJsonlot(lt);
+                    LotService.SaveLotAndInformQA_AND_PE(lot);
+                    //this.lblPrompt.Text = string.Format("{0} lots loaded", i + 1);
                 }
+
+                //Lot_TransformService lts = new Lot_TransformService();
+                //Lot_Transformed lt = lts.ReadJson(jsonStr, messages);
+
+                //if (lt != null)
+                //{
+                //    lts.SaveCPJsonlot(lt);
+                //}
 
 
                 //Application.DoEvents();
