@@ -4,17 +4,27 @@ var uploaderForRecall = null;
 var uploaderForManualHold = null;
 
 $(document).ready(function () {
-    $.datetimepicker.setLocale('en');
+    //$.datetimepicker.setLocale('en');
 
-    $('#txtCompletionDate').datetimepicker({
-        lang: 'ch',
-        timepicker: false,
-        format: 'Y-m-d',
-        formatDate: 'Y-m-d',
-        minDate: '2016/01/01', // yesterday is minimum date
-        maxDate: getNowFormatDate()// and tommorow is maximum date calendar
+    //$('#txtCompletionDate').datetimepicker({
+    //    lang: 'ch',
+    //    timepicker: false,
+    //    format: 'Y-m-d',
+    //    formatDate: 'Y-m-d',
+    //    minDate: '2016/01/01', // yesterday is minimum date
+    //    maxDate: getNowFormatDate()// and tommorow is maximum date calendar
 
+    //});
+    $('#txtCompletionDate').daterangepicker({
+        minDate: '2016/01/01',
+        maxDate: getNowFormatDate(),
+        autoApply: true,
+        useCurrent: false,
+        locale: {
+            format: 'YYYY/MM/DD',
+        },
     });
+    $('#txtCompletionDate').val("");
 
 });
 

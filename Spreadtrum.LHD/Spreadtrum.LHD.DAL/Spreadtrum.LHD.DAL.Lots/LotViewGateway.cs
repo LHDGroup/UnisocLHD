@@ -87,7 +87,8 @@ namespace Spreadtrum.LHD.DAL.Lots
                 }
                 if (!StringHelper.isNullOrEmpty(query.CompletionDate))
                 {
-                    conditions.ConditionExpressions.Add(new Condition("CompletionDate", Operator.Between, query.CompletionDate, query.CompletionDate + " 23:59:59"));
+                    string[] dateArray = query.CompletionDate.Split('-');
+                    conditions.ConditionExpressions.Add(new Condition("CompletionDate", Operator.Between, dateArray[0], dateArray[1] + " 23:59:59"));
                 }
                 if (!StringHelper.isNullOrEmpty(query.Damage))
                 {
