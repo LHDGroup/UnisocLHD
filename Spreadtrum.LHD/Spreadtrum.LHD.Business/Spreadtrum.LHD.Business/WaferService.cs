@@ -66,7 +66,7 @@ namespace Spreadtrum.LHD.Business
                             if (type != 3 && lot != null)
                             {
                                 //发邮件
-                                NotificationService.CreateCpOSATConfirmNotificationsWhilePeDispose(lot.Vendor, lot, "test", dispose);
+                                //NotificationService.CreateCpOSATConfirmNotificationsWhilePeDispose(lot.Vendor, lot, "test", dispose);
                             }
                         }
                     }
