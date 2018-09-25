@@ -495,7 +495,7 @@ namespace Spreadtrum.LHD.DAL.Lots
                     if (resultDic != null) {
                         foreach (KeyValuePair<int, ArrayList> kvp in resultDic) {
                             suc += kvp.Key;
-                            if (kvp.Value != null) {
+                            if (kvp.Value != null && kvp.Value.Count > 0) {
                                 list.Add(kvp.Value[0]);
                             }
                         }

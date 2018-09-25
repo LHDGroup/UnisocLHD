@@ -2,6 +2,7 @@
 
 var uploaderForRecall = null;
 var uploaderForManualHold = null;
+var DisposeAction = 255;
 
 $(document).ready(function () {
     //$.datetimepicker.setLocale('en');
@@ -185,6 +186,8 @@ function getAllLots(pageIndex) {
                 $("#loadingLots").css("display", "none");
                 $("#lotsNotFound").css("display", "none");
                 $(".operate_buttons").attr("disabled", false);
+                $("#btn_info_row").css("display", "block");
+                $("#btn_info_confirm").css("display", "block");
 
             }
             else {
@@ -204,7 +207,11 @@ app.controller('getAllLotTable', function ($scope, $http) {
     $_http = $http;
     $_scope = $scope;
     getAllLots(0);
- 
+    $scope.checkAll = function () {  //全选全不选  
+        for (var i in $scope.data.rows) {
+            $scope.data.rows[i].check = $scope.all;
+        }
+    }
     $(function () {
         //双击单击
         //单击双击事件绑定开始
@@ -387,6 +394,13 @@ app.controller('getAllLotTable', function ($scope, $http) {
             }
         });
 
+        $("input[name='btnoperate']").click(function () {
+            $("input[name='btnoperate']").removeClass("btn-danger");
+            $(this).addClass("btn-danger");
+            var id = $(this).attr("attr_id");
+            $("#newDisposeDecision").val(id);
+        });
+
         //排序
         $('.table-query thead th').click(function () {
             var orderby = $(this).data("orderby");
@@ -408,6 +422,59 @@ app.controller('getAllLotTable', function ($scope, $http) {
             }
         });
 
+
+        $("#btnconfirm").click(function ()
+        {
+            $(this).attr("disabled", "disabled");
+
+            var role = $("#hidCurrentUserRole").val();
+            var newDisposeDecision = $("#newDisposeDecision").val();
+            if (newDisposeDecision < 0 || newDisposeDecision == undefined || newDisposeDecision == "") {
+                $(this).removeAttr("disabled");
+                alert("Please dispose then first before confirmation.");
+                return;
+            }
+
+            if ($("input[id^='chk_']:checked").length == 0)
+            {
+                alert("Please select item");
+                $(this).removeAttr("disabled");
+                return;
+            }
+
+            $("input[id^='chk_']").each(function () {
+                chkval = $(this).prop("checked");
+                if (chkval)
+                {
+                    if ($(this).attr("autoJudgeResult") != "NORMAL")
+                    {
+                        if (((Role == "PE" || Role == "PEAdmin") && ($(this).attr("PEDisposeText") == '' || $(this).attr("PEDisposeText") == 'Pending')) || ((Role == "QA" || Role == "QAAdmin") && ($(this).attr("QADisposeText") == '' || $(this).attr("QADisposeText") == 'Pending'))) {
+                            var request = "hidNewCommentID=" + guid() + "&lotID=" + $(this).attr("lotID") + "&hidRole=" + role + "&hidOtherBinDisposeDone=0&hidOSATConfirmed=0&txtComment=";
+                            if (role == "PE" || role == "PEAdmin") {
+                                request += "&PEDispose=" + status;
+                            }
+                            else if (role == "QA" || role == "QAAdmin") {
+                                request += "&QADispose=" + status;
+                            }
+                            $.post("/Lots/Dispose/SaveDecision", request).success(function (serverResult) {
+
+                                var response = new Response(serverResult);
+                                if (response.Code == "0") {
+                                    alert("success");
+                                    getAllLots(0);
+                                }
+                                else {
+                                    alert("fail");
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+           
+            $("input[name='btnoperate']").removeClass("btn-danger");
+            $(this).removeAttr("disabled");
+        });
     })
 
 

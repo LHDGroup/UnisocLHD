@@ -63,75 +63,75 @@ namespace Spreadtrum.LHD.Mvc.Areas.Lots.Controllers
             {
                 case UserRoles.OSAT:
                 case UserRoles.OSATAdmin:
-                {
-                    string str6 = base.Request.Form["chkConfirmedValue"];
-                    char[] separator = new char[] { ',' };
-                    string[] strArray = str6.Split(separator);
-                    if ((str6.Length <= 0) || (lotByLotID.SPRDDecision == 0xff))
                     {
-                        code = "1";
-                        message = "Confirm failed because the lot status changed.";
-                    }
-                    else
-                    {
-                        NotificationService.ClearNotificationsByOSATIDAndLotID(lotByLotID.VenderID, lotByLotID.LotID);
-                        foreach (string str7 in strArray)
+                        string str6 = base.Request.Form["chkConfirmedValue"];
+                        char[] separator = new char[] { ',' };
+                        string[] strArray = str6.Split(separator);
+                        if ((str6.Length <= 0) || (lotByLotID.SPRDDecision == 0xff))
                         {
-                            if (!(str7 == "0"))
+                            code = "1";
+                            message = "Confirm failed because the lot status changed.";
+                        }
+                        else
+                        {
+                            NotificationService.ClearNotificationsByOSATIDAndLotID(lotByLotID.VenderID, lotByLotID.LotID);
+                            foreach (string str7 in strArray)
                             {
-                                if (str7 == "1")
+                                if (!(str7 == "0"))
+                                {
+                                    if (str7 == "1")
+                                    {
+                                        lotByLotID.VenderConfirmed = true;
+                                        lotByLotID.VenderConfirmTime = DateTime.Now;
+                                    }
+                                    else if (str7 == "2")
+                                    {
+                                        lotByLotID.VenderConfirmed = true;
+                                        lotByLotID.VenderConfirmTime = DateTime.Now;
+                                        str3 = "Confirm Rescreen";
+                                    }
+                                    else if (str7 == "3")
+                                    {
+                                        lotByLotID.VenderConfirmed = true;
+                                        lotByLotID.VenderConfirmTime = DateTime.Now;
+                                        str3 = "Confirm Scrap";
+                                    }
+                                    else if (str7 == "5")
+                                    {
+                                        lotByLotID.OtherBinDisposeConfirmed = true;
+                                        lotByLotID.OtherBinDisposeConfirmTime = DateTime.Now;
+                                    }
+                                }
+                                else
                                 {
                                     lotByLotID.VenderConfirmed = true;
                                     lotByLotID.VenderConfirmTime = DateTime.Now;
-                                }
-                                else if (str7 == "2")
-                                {
-                                    lotByLotID.VenderConfirmed = true;
-                                    lotByLotID.VenderConfirmTime = DateTime.Now;
-                                    str3 = "Confirm Rescreen";
-                                }
-                                else if (str7 == "3")
-                                {
-                                    lotByLotID.VenderConfirmed = true;
-                                    lotByLotID.VenderConfirmTime = DateTime.Now;
-                                    str3 = "Confirm Scrap";
-                                }
-                                else if (str7 == "5")
-                                {
-                                    lotByLotID.OtherBinDisposeConfirmed = true;
-                                    lotByLotID.OtherBinDisposeConfirmTime = DateTime.Now;
+                                    str3 = "Confirm Release";
                                 }
                             }
-                            else
+                            if (str6.Contains("1") && str6.Contains("5"))
                             {
-                                lotByLotID.VenderConfirmed = true;
-                                lotByLotID.VenderConfirmTime = DateTime.Now;
-                                str3 = "Confirm Release";
+                                str3 = "Confirm Bin1 Release and Other Bin Dispose";
                             }
-                        }
-                        if (str6.Contains("1") && str6.Contains("5"))
-                        {
-                            str3 = "Confirm Bin1 Release and Other Bin Dispose";
-                        }
-                        if (str6.Contains("1") && !str6.Contains("5"))
-                        {
-                            str3 = "Confirm Bin1 Release";
-                        }
-                        if (!str6.Contains("1") && str6.Contains("5"))
-                        {
-                            str3 = "Confirm Other Bin Dispose";
-                        }
-                        LotService.UpdateLot(lotByLotID);
-                        lotByLotID = LotService.GetLotByLotID(lotByLotID.LotID);
-                        if (lotByLotID.Status == "END")
-                        {
-                            lotByLotID.SDStates = 0xff;
+                            if (str6.Contains("1") && !str6.Contains("5"))
+                            {
+                                str3 = "Confirm Bin1 Release";
+                            }
+                            if (!str6.Contains("1") && str6.Contains("5"))
+                            {
+                                str3 = "Confirm Other Bin Dispose";
+                            }
                             LotService.UpdateLot(lotByLotID);
+                            lotByLotID = LotService.GetLotByLotID(lotByLotID.LotID);
+                            if (lotByLotID.Status == "END")
+                            {
+                                lotByLotID.SDStates = 0xff;
+                                LotService.UpdateLot(lotByLotID);
+                            }
                         }
+                        //base.Session.Contents["User"] = UserService.GetOSATUserByHashedCID(BaseController.CurrentUserInfo.UserID);
+                        goto Label_0431;
                     }
-                    //base.Session.Contents["User"] = UserService.GetOSATUserByHashedCID(BaseController.CurrentUserInfo.UserID);
-                    goto Label_0431;
-                }
                 case UserRoles.PE:
                 case UserRoles.PEAdmin:
                     lotByLotID.PEDisposeTime = DateTime.Now;
@@ -192,35 +192,38 @@ namespace Spreadtrum.LHD.Mvc.Areas.Lots.Controllers
                 default:
                     goto Label_0431;
             }
-        Label_0114:
+            Label_0114:
             //base.Session.Contents["User"] = UserService.GetUserByID(BaseController.CurrentUserInfo.UserID);
             code = "0";
             message = "Save decision successed.";
-        Label_0431:
+            Label_0431:
             LotService.UpdateLot(lotByLotID);
             string commentText = base.Request.Form["txtComment"];
             string commentID = base.Request.Form["hidNewCommentID"];
             bool internalOnly = base.Request.Form["chkInternal"] != null;
-            if (internalOnly && (dispose != -1))
+            if (!string.IsNullOrEmpty(commentID))
             {
-                Comment comment = LotService.GenerateComment(lotByLotID.LotID, dispose, commentID, commentText, internalOnly, BaseController.CurrentUserInfo);
-                Comment comment2 = LotService.GenerateComment(lotByLotID.LotID, dispose, Guid.NewGuid().ToString(), "", false, BaseController.CurrentUserInfo);
-                if (!StringHelper.isNullOrEmpty(str3))
+                if (internalOnly && (dispose != -1))
                 {
-                    comment.CommentText = str3 + "<br/>" + comment.CommentText;
-                    comment2.CommentText = str3;
+                    Comment comment = LotService.GenerateComment(lotByLotID.LotID, dispose, commentID, commentText, internalOnly, BaseController.CurrentUserInfo);
+                    Comment comment2 = LotService.GenerateComment(lotByLotID.LotID, dispose, Guid.NewGuid().ToString(), "", false, BaseController.CurrentUserInfo);
+                    if (!StringHelper.isNullOrEmpty(str3))
+                    {
+                        comment.CommentText = str3 + "<br/>" + comment.CommentText;
+                        comment2.CommentText = str3;
+                    }
+                    LotService.AddDisposeComment(comment);
+                    LotService.AddDisposeComment(comment2);
                 }
-                LotService.AddDisposeComment(comment);
-                LotService.AddDisposeComment(comment2);
-            }
-            else
-            {
-                Comment comment3 = LotService.GenerateComment(lotByLotID.LotID, dispose, commentID, commentText, internalOnly, BaseController.CurrentUserInfo);
-                if (!StringHelper.isNullOrEmpty(str3))
+                else
                 {
-                    comment3.CommentText = str3 + "<br/>" + comment3.CommentText;
+                    Comment comment3 = LotService.GenerateComment(lotByLotID.LotID, dispose, commentID, commentText, internalOnly, BaseController.CurrentUserInfo);
+                    if (!StringHelper.isNullOrEmpty(str3))
+                    {
+                        comment3.CommentText = str3 + "<br/>" + comment3.CommentText;
+                    }
+                    LotService.AddDisposeComment(comment3);
                 }
-                LotService.AddDisposeComment(comment3);
             }
             ResponseTypes tip = ResponseTypes.Tip;
             TipTypes information = TipTypes.Information;
