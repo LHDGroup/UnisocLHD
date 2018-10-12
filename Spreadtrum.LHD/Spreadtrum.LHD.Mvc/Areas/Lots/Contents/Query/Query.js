@@ -448,13 +448,13 @@ app.controller('getAllLotTable', function ($scope, $http) {
                 {
                     if ($(this).attr("autoJudgeResult") != "NORMAL")
                     {
-                        if (((Role == "PE" || Role == "PEAdmin") && ($(this).attr("PEDisposeText") == '' || $(this).attr("PEDisposeText") == 'Pending')) || ((Role == "QA" || Role == "QAAdmin") && ($(this).attr("QADisposeText") == '' || $(this).attr("QADisposeText") == 'Pending'))) {
+                        if (((role == "PE" || role == "PEAdmin") && ($(this).attr("PEDisposeText") == '' || $(this).attr("PEDisposeText") == 'Pending')) || ((role == "QA" || role == "QAAdmin") && ($(this).attr("QADisposeText") == '' || $(this).attr("QADisposeText") == 'Pending'))) {
                             var request = "hidNewCommentID=" + guid() + "&lotID=" + $(this).attr("lotID") + "&hidRole=" + role + "&hidOtherBinDisposeDone=0&hidOSATConfirmed=0&txtComment=";
                             if (role == "PE" || role == "PEAdmin") {
-                                request += "&PEDispose=" + status;
+                                request += "&PEDispose=" + newDisposeDecision;
                             }
                             else if (role == "QA" || role == "QAAdmin") {
-                                request += "&QADispose=" + status;
+                                request += "&QADispose=" + newDisposeDecision;
                             }
                             $.post("/Lots/Dispose/SaveDecision", request).success(function (serverResult) {
 
