@@ -96,6 +96,14 @@ namespace Spreadtrum.LHD.Business
                         List<string> allBinPercentList = new List<string>();
                         int index = 0;
                         string waferid = "";
+                        bool withHlimit = false;
+                        LotMeteModel allbin = metaList.Where(p=>p.key=="allBin").FirstOrDefault<LotMeteModel>();
+
+                        if(allbin.values[1] != "yield")
+                        {
+                            withHlimit = true;
+                        }
+
                         foreach (LotMeteModel item in metaList)
                         {
                             if (item.key == EnumLotMeta.osat.ToString())
@@ -105,12 +113,20 @@ namespace Spreadtrum.LHD.Business
                             #region allitem
                             if (item.key == EnumLotMeta.allItem.ToString())
                             {
-                                index = 0;
+                                if (withHlimit)
+                                {
+                                    index = 1;
+                                }
+                                else
+                                {
+                                    index = 0;
+                                }
                                 waferid = "";
                                 foreach (string s in item.values)
                                 {
                                     index++;
-                                    if (index > 1)
+                                    int startIndex = withHlimit ? 2 : 1;
+                                    if (index > startIndex)
                                     {
                                         if (!waferid.Equals(s))
                                         {
@@ -131,6 +147,7 @@ namespace Spreadtrum.LHD.Business
                             {
                                 allBinList = item.values;
                                 allBinList.RemoveAt(0);
+                                
                             }
                             if (item.key == EnumLotMeta.allBinLimit.ToString())
                             {
@@ -142,6 +159,12 @@ namespace Spreadtrum.LHD.Business
                                 allBinPercentList = item.values;
                                 allBinPercentList.RemoveAt(0);
                             }
+                        }
+                        if (withHlimit)
+                        {
+                            allBinList.RemoveAt(0);
+                            allBinLimtList.RemoveAt(0);
+                            allBinPercentList.RemoveAt(0);
                         }
                         mata.WaferList = waferList;
                         mata.WaferidCount = waferidcount;
