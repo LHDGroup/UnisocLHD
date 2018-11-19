@@ -133,6 +133,10 @@
        .p8{
           width: 7%;
       }
+        #thCreateDate {
+            width: 180px;
+        }
+
     </style>
 }
 @section js{
@@ -197,18 +201,19 @@
                                 <table class="table table-striped table-bordered table-hover table-query " role="grid" style="table-layout:inherit !important;">
                                     <thead>
                                         <tr role="row">
-                                            <td style="width:2% !important;"><input  type="checkbox" class="boxclass" id="checkall" ng-click="checkAll()" ng-model="all" /></td>
+                                            <td style="width:2% !important;"><input type="checkbox" class="boxclass" id="checkall" ng-click="checkAll()" ng-model="all" /></td>
                                             <th id="thProductName" data-orderby="ProductName" data-desc="true" class="p8">Product Name<span></span></th>
                                             <th id="thWaferCode" data-orderby="WaferCode" data-desc="true" class="p8">Wafer Code<span></span></th>
                                             <th id="thVendor" data-orderby="Vendor" data-desc="true" class="p8">OSAT<span></span></th>
                                             <th id="thLotId" data-orderby="LotId" data-desc="true" class="p8">Lot Id<span></span></th>
-                                            <th  class="p8">Disposition</th>
+                                            <th class="p8">Disposition</th>
                                             <th class="p8">MDS<span></span></th>
                                             <th id="thStatus" data-orderby="Status" data-desc="true" class="p8">Status<span></span></th>
-                                            <th id="thHoldReason" data-orderby="HoldReason" data-desc="true" style="overflow:hidden;width:15%;" >Hold Reason<span></span></th>
+                                            <th id="thHoldReason" data-orderby="HoldReason" data-desc="true" style="overflow:hidden;width:15%;">Hold Reason<span></span></th>
                                             <th id="thWfCount" data-orderby="WfCount" data-desc="true" class="p8">Wf Count<span></span></th>
                                             <th id="thYield" data-orderby="Yield" data-desc="true" class="p8">Yield<span></span></th>
                                             <th id="thCompletionDate" data-orderby="CompletionDate" data-desc="true" style="width:12px;">Completion Date<span></span></th>
+                                            <th id="thCreateDate" data-orderby="CreateDate" data-desc="true" style="width:12px;">CreateDate<span></span></th>
                                         </tr>
                                         <tr class="collapse" id="QueryTr">
                                             <td></td>
@@ -254,6 +259,7 @@
                                             <td class="p8"><input id="textWfCount" name="WfCount" type="text" class="p80" /></td>
                                             <td class="p8"><input id="textYield" name="Yield" type="text" class="p80" /></td>
                                             <td><input id="textCompletionDate" class="inpudate" name="CompletionDate" type="text" style="width:80%"/>@*<span class="input-group-addon clearBtns" id="clearx">x</span>@*—<input id="textEndDate" class="inpudate" name="EndDate"  type="text" style="width:40%" />*@</td>
+                                            <td><input id="textCreateDate" class="inpudate" name="CreateDate" type="text" style="width:80%" /></td>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -272,6 +278,7 @@
                                             <td>{{u.WfCount}}</td>
                                             <td>{{u.Yield|number:2}}%</td>
                                             <td ng-class="TdClass(u.CompletionDate,u.OperatorStatus,u.dayCount)">{{u.CompletionDate|date:'yyyy/MM/dd'}}</td>
+                                            <td ng-class="TdClass(u.CreateDate,u.OperatorStatus,u.dayCount)">{{u.CreateDate|date:'yyyy/MM/dd'}}</td>
                                         </tr>
                                         <tr id="loadingLots">
                                             <td colspan="45" style="text-align:left">

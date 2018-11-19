@@ -24,7 +24,7 @@ namespace Spreadtrum.LHD.Mvc.Controllers
             else
             {
                 //base.Response.Redirect("/Accounts/Login");
-                base.Response.Redirect("http://b2b.unisoc.com:2012/", true);
+                base.Response.Redirect("https://sdx.unisoc.com/", true);
             }
             return null;
         }

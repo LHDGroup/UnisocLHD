@@ -13,6 +13,15 @@ $(document).ready(function () {
         },
     });
     $('#textCompletionDate').val("");
+    $('#textCreateDate').daterangepicker({
+        minDate: '2016/01/01',
+        maxDate: getNowFormatDate(),
+        autoApply: true,
+        locale: {
+            format: 'YYYY/MM/DD',
+        },
+    });
+    $('#textCreateDate').val("");
 });
 
 

@@ -144,7 +144,7 @@ namespace Spreadtrum.LHD.Mvc.Areas.Shared
             //if (user == null && this.needLogin)
             if (user == null && this.needLogin)
             {
-                base.Response.Redirect("http://b2b.unisoc.com:2012/", true);
+                base.Response.Redirect("https://sdx.unisoc.com/", true);
             }
         }
         private static void AppendKeyValueToForm(HttpRequestBase request, string key, string value)

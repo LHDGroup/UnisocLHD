@@ -21,6 +21,7 @@ namespace Spreadtrum.LHD.Mvc.Areas.Lots.Controllers
                 WfCount = StringHelper.isNullOrEmpty(request.QueryString["WfCount"]) ? -1 : Convert.ToInt32(request.QueryString["WfCount"]),
                 Yield = request.QueryString["Yield"],
                 CompletionDate = request.QueryString["CompletionDate"],
+                CreateDate = request.QueryString["CreateDate"],
                 OrderBy = request.QueryString["OrderBy"],
                 OrderDesc = StringHelper.isNullOrEmpty(request.QueryString["OrderDesc"]) ? false : Convert.ToBoolean(request.QueryString["OrderDesc"]),
                 LastDays = StringHelper.isNullOrEmpty(request.QueryString["LastDays"]) ? -1 : Convert.ToInt32(request.QueryString["LastDays"]),

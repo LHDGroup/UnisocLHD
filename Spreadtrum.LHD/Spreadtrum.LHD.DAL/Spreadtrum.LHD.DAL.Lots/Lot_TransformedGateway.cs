@@ -104,6 +104,11 @@ namespace Spreadtrum.LHD.DAL.Lots
                 string[] dateArray = lot.CompletionDate.Split('-');
                 conditions.ConditionExpressions.Add(new Condition("CompletionDate", Operator.Between, dateArray[0], dateArray[1]+ " 23:59:59"));
             }
+            if (!StringHelper.isNullOrEmpty(lot.CreateDate))
+            {
+                string[] dateArray = lot.CreateDate.Split('-');
+                conditions.ConditionExpressions.Add(new Condition("CreateDate", Operator.Between, dateArray[0], dateArray[1] + " 23:59:59"));
+            }
             if (lot.LastDays > 0) {
                 var dt = DateTime.Now.ToLocalTime();
                 if (lot.LastDays == 1)

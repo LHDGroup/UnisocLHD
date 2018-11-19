@@ -19,6 +19,7 @@ namespace Spreadtrum.LHD.Entity.Lots
         private int wfCount= -1;
         private string yield = string.Empty;
         private string completionDate = string.Empty;
+        private string createDate = string.Empty;
         private string orderBy = string.Empty;
         private bool orderDesc=false;
         private int lastDays =1;
@@ -117,6 +118,18 @@ namespace Spreadtrum.LHD.Entity.Lots
             set
             {
                 completionDate = value;
+            }
+        }
+        public string CreateDate
+        {
+            get
+            {
+                return createDate;
+            }
+
+            set
+            {
+                createDate = value;
             }
         }
 

@@ -50,7 +50,7 @@ namespace Spreadtrum.LHD.Mvc.Areas.Lots.Controllers
             if (CurrentUserInfo.Role == UserRoles.Fab || CurrentUserInfo.Role == UserRoles.FabAdmin)
             {
                 query.Osat = CurrentUserInfo.BUName;
-                query.Status = (int)WaferStatus.WaitVendor;
+                //query.Status = (int)WaferStatus.WaitVendor;
             }
             int recordCount = 0;
             IList<Wafer> list = service.GetAllWaferBy(query, pageSize, pageIndex, out recordCount);

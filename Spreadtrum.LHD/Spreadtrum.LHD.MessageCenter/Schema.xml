@@ -21,7 +21,8 @@
     <field name="WaitForConfirm" propertyname="WaitForConfirm" columnType="1"/>
     <field name="WaitForOtherBinDispose" propertyname="WaitForOtherBinDispose" columnType="1"/>
     <field name="EQALots" propertyname="EQALots" columnType="1"/>
-    
+    <field name="JobType" propertyname="JobType"/>
+
   </table>
   <table name="SPRD_USERS">
     <field name="Id" propertyname="Id" PKField="1"/>
@@ -112,7 +113,7 @@
     <field name="Bin7" propertyname="Bin7"/>
     <field name="Bin8" propertyname="Bin8"/>
     <field name="Bin9" propertyname="Bin9"/>
-    <field name="Bin10" propertyname="Bin10"/>    
+    <field name="Bin10" propertyname="Bin10"/>
     <field name="RetestTimes" propertyname="RetestTimes"/>
     <field name="TesterID" propertyname="TesterID"/>
     <field name="Platforms" propertyname="Platforms"/>
@@ -150,6 +151,14 @@
     <field name="QtyOut" propertyname="QtyOut"/>
     <field name="totalCount" propertyname="totalCount"/>
     <field name="passCount" propertyname="passCount"/>
+    <field name="ReasonStepFail" propertyname="ReasonStepFail"/>
+    <field name="ReasonStepWarn" propertyname="ReasonStepWarn"/>
+    <field name="ReasonSBLFail" propertyname="ReasonSBLFail"/>
+    <field name="ReasonUntestedFail" propertyname="ReasonUntestedFail"/>
+    <field name="ReasonStepOrderFail" propertyname="ReasonStepOrderFail"/>
+    <field name="decisionTime" propertyname="decisionTime"/>
+    <field name="TriggerMode" propertyname="TriggerMode"/>
+    <field name="Assembly" propertyname="Assembly"/>
   </table>
   <table name="VW_LOTS">
     <field name="ID" propertyname="ID" PKField="1"/>
@@ -196,7 +205,7 @@
     <field name="RetestTimes" propertyname="RetestTimes"/>
     <field name="TesterID" propertyname="TesterID"/>
     <field name="Platforms" propertyname="Platforms"/>
-    <field name="LBNO" propertyname="LBNO"/>    
+    <field name="LBNO" propertyname="LBNO"/>
     <field name="Version" propertyname="Version"/>
     <field name="OperatorID" propertyname="OperatorID"/>
     <field name="OperateTime" propertyname="OperateTime"/>
@@ -229,6 +238,17 @@
     <field name="SwBinCount" propertyname="SwBinCount" columnType="1"/>
     <field name="CustomerLotID" propertyname="CustomerLotID"/>
     <field name="Url" propertyname="Url"/>
+    <field name="QtyOut" propertyname="QtyOut"/>
+    <field name="totalCount" propertyname="totalCount"/>
+    <field name="passCount" propertyname="passCount"/>
+    <field name="ReasonStepFail" propertyname="ReasonStepFail"/>
+    <field name="ReasonStepWarn" propertyname="ReasonStepWarn"/>
+    <field name="ReasonSBLFail" propertyname="ReasonSBLFail"/>
+    <field name="ReasonUntestedFail" propertyname="ReasonUntestedFail"/>
+    <field name="ReasonStepOrderFail" propertyname="ReasonStepOrderFail"/>
+    <field name="decisionTime" propertyname="decisionTime"/>
+    <field name="TriggerMode" propertyname="TriggerMode"/>
+    <field name="Assembly" propertyname="Assembly"/>
   </table>
   <table name="COMMENTS">
     <field name="CommentID" propertyname="CommentID" PKField="1"/>
@@ -303,6 +323,8 @@
     <field name="NewComments" propertyname="NewComments" columnType="1"/>
     <field name="WaitForConfirm" propertyname="WaitForConfirm" columnType="1"/>
     <field name="EQALots" propertyname="EQALots" columnType="1"/>
+    <field name="JobType" propertyname="JobType"/>
+    <field name="Role" propertyname="Role"/>
   </table>
   <table name="FILES">
     <field name="FileID" propertyname="FileID" PKField="1"/>
@@ -381,14 +403,14 @@
     <field name="IsTriggerd" propertyname="IsTriggerd"/>
     <field name="Limited" propertyname="Limited"/>
     <field name="FailedBinPercent" propertyname="FailedBinPercent"/>
-    
+
   </table>
   <table name="VW_NOTIFICATIONCOUNTER">
     <field name="UserID" propertyname="UserID" PKField="1"/>
     <field name="NewComments" propertyname="NewComments"/>
     <field name="WaitForConfirm" propertyname="WaitForConfirm"/>
     <field name="WaitDispose" propertyname="WaitDispose"/>
-    <field name="WaitForOtherBinDispose" propertyname="WaitForOtherBinDispose"/>    
+    <field name="WaitForOtherBinDispose" propertyname="WaitForOtherBinDispose"/>
   </table>
   <table name="SILICONDASH_OSAT_CONFIGURATIONS">
     <field name="ConfigurationID" propertyname="ConfigurationID" PKField="1"/>
@@ -402,6 +424,7 @@
     <field name="MessageOutDirectory" propertyname="MessageOutDirectory"/>
     <field name="States" propertyname="States"/>
     <field name="CreateTime" propertyname="CreateTime"/>
+    <field name="Type" propertyname="Type"/>
   </table>
   <table name="VW_NOTIFICATIONSWITHLOTS">
     <field name="ID" propertyname="ID" PKField="1"/>
@@ -483,5 +506,172 @@
     <field name="VenderConfirmed" propertyname="VenderConfirmed"/>
     <field name="OtherBinDisposeConfirmed" propertyname="OtherBinDisposeConfirmed"/>
     <field name="Status" propertyname="Status"/>
+  </table>
+
+
+
+  <table name="VENDORS">
+    <field name="VendorID" propertyname="VendorID" PKField="1"/>
+    <field name="VendorName" propertyname="VendorName" />
+    <field name="VendorType" propertyname="VendorType"/>
+  </table>
+  <table name="LOTS_TRANSFORMED">
+    <field name="ID" propertyname="ID" PKField="1"/>
+    <field name="ProductName" propertyname="ProductName"/>
+    <field name="WaferCode" propertyname="WaferCode"/>
+    <field name="Vendor" propertyname="Vendor"/>
+    <field name="LotId" propertyname="LotId"/>
+    <field name="Status" propertyname="Status"/>
+    <field name="HoldReason" propertyname="HoldReason"/>
+    <field name="WfCount" propertyname="WfCount"/>
+    <field name="Yield" propertyname="Yield"/>
+    <field name="CompletionDate" propertyname="CompletionDate"/>
+    <field name="UploadDate" propertyname="UploadDate"/>
+    <field name="AutoJudeResult" propertyname="AutoJudeResult"/>
+    <field name="Stage" propertyname="Stage"/>
+    <field name="WaitingTime" propertyname="WaitingTime"/>
+    <field name="TestProgram" propertyname="TestProgram"/>
+    <field name="TesterID" propertyname="TesterID"/>
+    <field name="Platform" propertyname="Platform"/>
+    <field name="LBNO" propertyname="LBNO"/>
+    <field name="OSFailRate" propertyname="OSFailRate"/>
+    <field name="Url" propertyname="Url"/>
+    <field name="OperatorStatus" propertyname="OperatorStatus"/>
+    <field name="CreateDate" propertyname="CreateDate"/>
+    <field name="RecordType" propertyname="RecordType"/>
+    <field name="VersionID" propertyname="VersionID"/>
+  </table>
+  <table name="VW_LOTTRANSFORMED">
+    <field name="ID" propertyname="ID" PKField="1"/>
+    <field name="ProductName" propertyname="ProductName"/>
+    <field name="WaferCode" propertyname="WaferCode"/>
+    <field name="Vendor" propertyname="Vendor"/>
+    <field name="LotId" propertyname="LotId"/>
+    <field name="HoldReason" propertyname="HoldReason"/>
+    <field name="WfCount" propertyname="WfCount"/>
+    <field name="Yield" propertyname="Yield"/>
+    <field name="CompletionDate" propertyname="CompletionDate"/>
+    <field name="UploadDate" propertyname="UploadDate"/>
+    <field name="WaitingTime" propertyname="WaitingTime"/>
+    <field name="AutoJudeResult" propertyname="AutoJudeResult"/>
+    <field name="Stage" propertyname="Stage"/>
+    <field name="TestProgram" propertyname="TestProgram"/>
+    <field name="TesterID" propertyname="TesterID"/>
+    <field name="Platform" propertyname="Platform"/>
+    <field name="LBNO" propertyname="LBNO"/>
+    <field name="OSFailRate" propertyname="OSFailRate"/>
+    <field name="Url" propertyname="Url"/>
+    <field name="CreateDate" propertyname="CreateDate"/>
+    <field name="OperatorStatus" propertyname="OperatorStatus"/>
+    <field name="Status" propertyname="Status"/>
+
+  </table>
+
+  <table name="WAFER">
+    <field name="ID" propertyname="ID" PKField="1"/>
+    <field name="TransformID" propertyname="TransformID"/>
+    <field name="Status" propertyname="Status"/>
+    <field name="StatusText" propertyname="StatusText" columnType="1"/>
+    <field name="HoldReason" propertyname="HoldReason"/>
+    <field name="Yield" propertyname="Yield"/>
+    <field name="CompletionDate" propertyname="CompletionDate"/>
+    <field name="PEDispose" propertyname="PEDispose"/>
+    <field name="PEDisposeText" propertyname="PEDisposeText" columnType="1"/>
+    <field name="QADispose" propertyname="QADispose"/>
+    <field name="QADisposeText" propertyname="QADisposeText" columnType="1"/>
+    <field name="SPRDDecision" propertyname="SPRDDecision"/>
+    <field name="SPRDDecisionText" propertyname="SPRDDecisionText" columnType="1"/>
+    <field name="Comment" propertyname="Comment"/>
+    <field name="Program" propertyname="Program"/>
+    <field name="StartTime" propertyname="StartTime"/>
+    <field name="TotalCount" propertyname="TotalCount"/>
+    <field name="CreateDate" propertyname="CreateDate"/>
+  </table>
+  <table name="VW_WAFERS">
+    <field name="ID" propertyname="ID" PKField="1"/>
+    <field name="ProductName" propertyname="ProductName"/>
+    <field name="WaferCode" propertyname="WaferCode"/>
+    <field name="Vendor" propertyname="Vendor"/>
+    <field name="LotId" propertyname="LotId"/>
+    <field name="AutoJudeResult" propertyname="AutoJudeResult"/>
+    <field name="WaferID" propertyname="WaferID"/>
+    <field name="TransformID" propertyname="TransformID"/>
+    <field name="Status" propertyname="Status"/>
+    <field name="HoldReason" propertyname="HoldReason" />
+    <field name="Yield" propertyname="Yield"/>
+    <field name="CompletionDate" propertyname="CompletionDate"/>
+    <field name="PEDispose" propertyname="PEDispose"/>
+    <field name="PEComment" propertyname="PEComment"/>
+    <field name="QADispose" propertyname="QADispose"/>
+    <field name="QAComment" propertyname="QAComment"/>
+    <field name="SPRDDecision" propertyname="SPRDDecision"/>
+    <field name="CreateDate" propertyname="CreateDate"/>
+    <field name="VendorConfirm" propertyname="VendorConfirm"/>
+    <field name="VendorComment" propertyname="VendorComment"/>
+    <field name="Program" propertyname="Program"/>
+    <field name="StartTime" propertyname="StartTime"/>
+    <field name="TotalDieCount" propertyname="TotalDieCount"/>
+    <field name="ImgUrl" propertyname="ImgUrl"/>
+  </table>
+
+  <table name="WAFE_STATUS_LIST">
+    <field name="ID" propertyname="ID" PKField="1"/>
+    <field name="PeDispose" propertyname="PeDispose" />
+    <field name="QaDispose" propertyname="QaDispose"/>
+    <field name="SprdDecision" propertyname="SprdDecision"/>
+    <field name="FeedBack" propertyname="FeedBack"/>
+  </table>
+  <table name="WAFER_HISTORY">
+    <field name="ID" propertyname="ID" PKField="1"/>
+    <field name="TransformID" propertyname="TransformID" />
+    <field name="WaferID" propertyname="WaferID"/>
+    <field name="Dispose" propertyname="Dispose"/>
+    <field name="UserID" propertyname="UserID"/>
+    <field name="Comment" propertyname="Comment"/>
+    <field name="CreateTime" propertyname="CreateTime"/>
+    <field name="IsVendor" propertyname="IsVendor"/>
+  </table>
+
+  <table name="WAFER_SBIN">
+    <field name="ID" propertyname="ID" PKField="1"/>
+    <field name="WaferID" propertyname="WaferID" />
+    <field name="LotID" propertyname="LotID"/>
+    <field name="SbinValue" propertyname="SbinValue"/>
+    <field name="IsTriggered" propertyname="IsTriggered"/>
+    <field name="SbinText" propertyname="SbinText" />
+    <field name="SbinLimit" propertyname="SbinLimit"/>
+    <field name="Sort" propertyname="Sort"/>
+    <field name="CreatedTime" propertyname="CreatedTime"/>
+  </table>
+
+  <table name="VW_WAFERHISTORYS">
+    <field name="ID" propertyname="ID" PKField="1"/>
+    <field name="ProductName" propertyname="ProductName" />
+    <field name="WaferCode" propertyname="WaferCode"/>
+    <field name="LotId" propertyname="LotId"/>
+    <field name="WaferID" propertyname="WaferID"/>
+    <field name="Dispose" propertyname="Dispose"/>
+    <field name="UserID" propertyname="UserID"/>
+    <field name="Comment" propertyname="Comment"/>
+    <field name="CreateTime" propertyname="CreateTime"/>
+    <field name="IsVendor" propertyname="IsVendor"/>
+  </table>
+  <table name="TRANSFORMEDCOMMENT">
+    <field name="CommentID" propertyname="CommentID" PKField="1"/>
+    <field name="CommentText" propertyname="CommentText"/>
+    <field name="Operator" propertyname="Operator"/>
+    <field name="LotID" propertyname="LotID"/>
+    <field name="RecordState" propertyname="RecordState"/>
+    <field name="CreateTime" propertyname="CreateTime"/>
+    <field name="UpdateTime" propertyname="UpdateTime"/>
+    <field name="LastOperator" propertyname="LastOperator"/>
+    <field name="CommentType" propertyname="CommentType"/>
+    <field name="OperatorName" propertyname="OperatorName"/>
+    <field name="OperatorRole" propertyname="OperatorRole"/>
+    <field name="OperatorBUName" propertyname="OperatorBUName"/>
+    <field name="OperatorEmail" propertyname="OperatorEmail"/>
+    <field name="Internal" propertyname="Internal"/>
+    <field name="Dispose" propertyname="Dispose"/>
+    <field name="DisposeText" propertyname="DisposeText"/>
   </table>
 </dbSchema>

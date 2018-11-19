@@ -549,6 +549,12 @@ namespace Spreadtrum.LHD.Business
                                 result.decisionRecipeName += "(" + str2 + ")";
                             }
                             continue;
+                        case "assembly":
+                            if (!StringHelper.isNullOrEmpty(str2))
+                            {
+                                result.Assembly = str2;
+                            }
+                            continue;
                     }
                     switch (ComputeStringHash(s))
                     {

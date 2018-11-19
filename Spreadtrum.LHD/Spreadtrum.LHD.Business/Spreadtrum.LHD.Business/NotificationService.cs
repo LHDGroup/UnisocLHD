@@ -306,8 +306,8 @@ namespace Spreadtrum.LHD.Business
                 //};
                 //notificationGateway.AddNew(newNotification);
                 string newvalue = WaferHelper.WaferSelectionDes(dispose);
-                string str = emailGateway.GetEmailByID("OSATNotificationCP").Body.Replace("InsertFullNameHere", user.SupUserName).Replace("insertLotNoHere", lot.LotId).Replace("InsertUrlHere", string.Format("https://lhd.unisoc.com/Lots/Transform/Detail?id={0}", lot.ID)).Replace("InsertTimeHere", DateTime.Now.ToString("yyyy-MM-dd hh:MM:ss")).Replace("insertDisposeTextHere", newvalue);
-                string subject = string.Format("Please confirm Lot {0},{1}", lot.LotId,newvalue);
+                string str = emailGateway.GetEmailByID("OSATNotificationCP").Body.Replace("InsertFullNameHere", user.SupUserName).Replace("insertLotNoHere", lot.LotId).Replace("InsertUrlHere", string.Format("https://lhd.unisoc.com/Lots/wafer/list?transformID={0}", lot.ID)).Replace("InsertTimeHere", DateTime.Now.ToString("yyyy-MM-dd hh:MM:ss")).Replace("insertDisposeTextHere", newvalue);
+                string subject = string.Format("Please confirm Lot {0} dispose", lot.LotId);
                 CreateEmail(Guid.NewGuid().ToString(), user.MD5CID, user.SupMail, subject, str, lot.ID);
             }
         }

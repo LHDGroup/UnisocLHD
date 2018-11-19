@@ -84,6 +84,8 @@ namespace Spreadtrum.LHD.Entity.Lots
         private int _totalCount;
         private int _passCount;
 
+        private string _Assembly = string.Empty;
+
         public void SetPEDispose(int dispose)
         {
             this.PEDispose = dispose;
@@ -1015,6 +1017,18 @@ namespace Spreadtrum.LHD.Entity.Lots
                 this._passCount = value;
             }
         }
+        public string Assembly
+        {
+            get
+            {
+                return this._Assembly;
+            }
+            set
+            {
+                this._Assembly = value;
+            }
+        }
+
         public string ReasonStepFail
         {
             get;

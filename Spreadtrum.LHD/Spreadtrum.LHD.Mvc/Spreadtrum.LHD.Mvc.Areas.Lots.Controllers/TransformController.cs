@@ -219,8 +219,9 @@ namespace Spreadtrum.LHD.Mvc.Areas.Lots.Controllers
             if (CurrentUserInfo.Role == UserRoles.Fab || CurrentUserInfo.Role == UserRoles.FabAdmin)
             {
               query.Osat= CurrentUserInfo.BUName;
-              query.Status=(int)WaferStatus.WaitVendor;
-              query.PeVendorState = (int)WaferStatus.WaitPEVendor;
+
+              //query.Status=(int)WaferStatus.WaitVendor;
+              //query.PeVendorState = (int)WaferStatus.WaitPEVendor;
             }
             int recordCount = 0;
             IList<Lot_Transformed> list = service.GetAllLots(query, pageSize, pageIndex, out recordCount);
