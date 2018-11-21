@@ -4,6 +4,7 @@ namespace Spreadtrum.LHD.Mvc.Controllers
     using Spreadtrum.LHD.Business;
     using Spreadtrum.LHD.Entity.Users;
     using System;
+    using System.Web;
     using System.Web.Mvc;
 
     public class b2bLoginController : Controller
@@ -15,16 +16,24 @@ namespace Spreadtrum.LHD.Mvc.Controllers
             if (oSATUserByHashedCID != null)
             {
                 //base.Session.Contents["User"] = oSATUserByHashedCID;
+
                 System.Web.HttpContext.Current.Session["User"] = oSATUserByHashedCID;
                 WebClientOperator.WriteCookies(base.Response, "OSAT_CID", hashedCID, DateTime.Now.AddHours(4.0));
                 string nextUrl;
-                if (oSATUserByHashedCID.JobType.ToUpper().IndexOf("FT") > -1)
+                if (!string.IsNullOrEmpty(base.Request.QueryString["Source"]))
                 {
-                    nextUrl = "/Lots/Query/WaitConfirm";
+                    nextUrl = HttpUtility.UrlDecode(base.Request.QueryString["Source"], System.Text.Encoding.UTF8);
                 }
                 else
                 {
-                    nextUrl = "/Lots/Transform";
+                    if (oSATUserByHashedCID.JobType.ToUpper().IndexOf("FT") > -1)
+                    {
+                        nextUrl = "/Lots/Query/WaitConfirm";
+                    }
+                    else
+                    {
+                        nextUrl = "/Lots/Transform";
+                    }
                 }
                 base.Response.Redirect(nextUrl);
             }

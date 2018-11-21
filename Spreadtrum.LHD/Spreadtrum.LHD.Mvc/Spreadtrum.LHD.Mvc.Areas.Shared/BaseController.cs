@@ -143,8 +143,8 @@ namespace Spreadtrum.LHD.Mvc.Areas.Shared
             //BaseController.CurrentUserInfo = user;
             //if (user == null && this.needLogin)
             if (user == null && this.needLogin)
-            {
-                base.Response.Redirect("https://sdx.unisoc.com/", true);
+            { 
+                base.Response.Redirect("https://sdx.unisoc.com/_forms/default.aspx?ReturnUrl=%2f_layouts%2f15%2fAuthenticate.aspx%3fSource%3d%252F&Source=" + HttpUtility.UrlEncode(base.Request.Url.ToString(), System.Text.Encoding.UTF8), true); 
             }
         }
         private static void AppendKeyValueToForm(HttpRequestBase request, string key, string value)

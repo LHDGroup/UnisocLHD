@@ -4,6 +4,7 @@ namespace Spreadtrum.LHD.Mvc.Controllers
     using Spreadtrum.LHD.Mvc;
     using System;
     using System.Configuration;
+    using System.Web;
     using System.Web.Mvc;
 
     public class HomeController : Controller
@@ -24,7 +25,7 @@ namespace Spreadtrum.LHD.Mvc.Controllers
             else
             {
                 //base.Response.Redirect("/Accounts/Login");
-                base.Response.Redirect("https://sdx.unisoc.com/", true);
+                base.Response.Redirect("https://sdx.unisoc.com/_forms/default.aspx?ReturnUrl=%2f_layouts%2f15%2fAuthenticate.aspx%3fSource%3d%252F&Source=" + HttpUtility.UrlEncode(base.Request.Url.ToString(), System.Text.Encoding.UTF8), true);
             }
             return null;
         }
