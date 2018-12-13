@@ -572,6 +572,7 @@
   <table name="WAFER">
     <field name="ID" propertyname="ID" PKField="1"/>
     <field name="TransformID" propertyname="TransformID"/>
+    <field name="WaferID" propertyname="WaferID"/>
     <field name="Status" propertyname="Status"/>
     <field name="StatusText" propertyname="StatusText" columnType="1"/>
     <field name="HoldReason" propertyname="HoldReason"/>
