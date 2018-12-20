@@ -2,6 +2,7 @@
 var $_scope;
 var $_http;
 var recordCounts = 0;
+var _isWaferOperation = false;
 $(document).ready(function () {
 
     $('#textCompletionDate').daterangepicker({
@@ -14,6 +15,15 @@ $(document).ready(function () {
         }
     });
     $('#textCompletionDate').val("");
+    $('#textCreateDate').daterangepicker({
+        minDate: '2016/01/01',
+        maxDate: getNowFormatDate(),
+        autoApply: true,
+        locale: {
+            format: 'YYYY/MM/DD',
+        },
+    });
+    $('#textCreateDate').val("");
 });
 function getNowFormatDate() {
     var date = new Date();
@@ -30,12 +40,19 @@ function getNowFormatDate() {
     var currentdate = year + seperator1 + month + seperator1 + strDate;
     return currentdate;
 }
+
+function GetQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]); return null;
+}
+
 function LoadAllWafer(pageIndex)
 {
     $("#loadingBox").css("display", "block");
     $("#queryResult").css("display", "none");
     $("#noLotsFound").css("display", "none");
-    $_http.get("/Lots/wafer/search?" + $("#frmQuery").serialize() + "&pageSize=50&pageIndex=" + pageIndex)
+    $_http.post("/Lots/wafer/search?" + $("#frmQuery").serialize() + "&pageSize=50&pageIndex=" + pageIndex)
        .success(function (res) {
            $_scope.data = res;
            currentPage = $_scope.data.currentPage + 1;
@@ -84,11 +101,17 @@ function LoadAllWafer(pageIndex)
           // $(".btu_list input").attr("disabled", "disabled");
        });
 }
+
 app.controller('getAllLotTable', function ($scope, $http)
 {
     
     $_http = $http;
     $_scope = $scope;
+
+    if (GetQueryString("transformID") == null) {
+        $("#hidisWaferOperation").val("Y");
+        _isWaferOperation = true;
+    }
     LoadAllWafer(0);
     
     $scope.checkAll = function () {  //全选全不选  
@@ -149,6 +172,16 @@ app.controller('getAllLotTable', function ($scope, $http)
             var id = $(this).attr("attr_id");
             $("#hidstatus").val(id);
             $("#hidstatustext").val($(this).val());
+            $("input[id^='chk_']").each(function (){
+                chkval = $(this).prop("checked");
+                if (chkval)
+                {
+                    var waferid = $(this).attr("attrwafer");
+                    $("td[attr_id='" + waferid + "'").text($("#hidstatustext").val());
+                    $("td[attr_id='" + waferid + "'").attr("attr_text", $("#hidstatustext").val());
+                    $("td[attr_id='" + waferid + "'").attr("attr_status",id);
+                }
+            });           
         });
         //one day
         $("a[name='btnDays']").click(function () {
@@ -190,78 +223,82 @@ app.controller('getAllLotTable', function ($scope, $http)
             var chkval;
             var strwaferids = "";
             var strlotids = "";
-            $("input[id^='chk_']").each(function () {
-                chkval = $(this).prop("checked");
-                if (chkval) {
+            var isconfirm = true;
+
+            if (_isWaferOperation)
+            {
+                var error = 0;              
+                $("input[id^='chk_']").each(function () {                    
+                    chkval = $(this).prop("checked");
+                    if (chkval) {
+                        if (strwaferids != "") {
+                            strwaferids += ",";
+                        }
+                        if (strlotids != "") {
+                            strlotids += ",";
+                        }
+                        if ($("td[attr_id='" + $(this).attr("attrwafer") + "'").attr("attr_status") == 0) {
+                            error++;
+                            return false;
+                        }
+                        strwaferids += $(this).attr("attrwafer") + ";" + $("td[attr_id='" + $(this).attr("attrwafer") + "'").attr("attr_status");
+                        strlotids += $(this).attr("attrlot");
+                    }                    
+                });
+
+                if (error > 0) {
+                    $(this).removeAttr("disabled");
+                    alert("Please dispose then first before confirmation.");
+                    return;
+                }
+                else {
+                    if (strwaferids == "") {
+                        $(this).removeAttr("disabled");
+                        alert("Please select item");
+                        return;
+                    }
+                }
+            }
+            else//wafer list
+            {
+                var error = 0;
+                $("td[id^='pedispose_']").each(function () {
+                    txt = $(this).attr("attr_text").trim();
+                    if (txt == "") {
+                        error++;
+                    }
+                });
+
+                if (error > 0) {
+                    $(this).removeAttr("disabled");
+                    alert("Please dispose all wafers before confirmation.");
+                    return;
+                }
+
+                $("input[id^='chk_']").each(function () {
                     if (strwaferids != "") {
                         strwaferids += ",";
                     }
                     if (strlotids != "") {
                         strlotids += ",";
                     }
-                    strwaferids += $(this).attr("attrwafer");
+                    strwaferids += $(this).attr("attrwafer") + ";" + $("td[attr_id='" + $(this).attr("attrwafer") + "'").attr("attr_status");
                     strlotids += $(this).attr("attrlot");
-                }
-            });
-            if (strwaferids == "") {
-                $(this).removeAttr("disabled");
-                alert("Please select item");
-                return;
-            }
+                });
+            }           
+
             $("#hidwaferids").val(strwaferids);
             $("#hidlotids").val(strlotids);
-            var isconfirm = true;
-            if (roletype == 2 || roletype == 3) {//pe/qa
-                var status = $("#hidstatus").val();
-                if (status <= 0 || status == undefined || status == "") {
-                    $(this).removeAttr("disabled");
-                    alert("Please dispose then first before confirmation.");
-                    return;
+
+            $http.post("/Lots/wafer/PEQADispose?" + $("#frmQuery").serialize()).success(function (res) {
+                if (res.suc > 0) {
+                    alert("success");
+                    LoadAllWafer(currentPage - 1);
+                } else {
+                    alert("fail");
                 }
-                var id = "";
-                var txt = "";
-                var error = 0;
-                if (roletype == 2) {//pe
-                    $("td[id^='pedispose_']").each(function () {
-                        txt = $(this).attr("attr_text").trim();
-                        if (txt == "") {
-                            id = $(this).attr("attr_id");
-                            chkval = $("#chk_" + id).prop("checked");
-                            if (!chkval) {
-                                error++;
-                            }
-                        }
-                    });
-                }
-                if (roletype == 3) {//qa
-                    $("td[id^='qadispose_']").each(function () {
-                        txt = $(this).attr("attr_text").trim();
-                        if (txt == "") {
-                            id = $(this).attr("attr_id");
-                            chkval = $("#chk_" + id).prop("checked");
-                            if (!chkval) {
-                                error++;
-                            }
-                        }
-                    });
-                }
-                if (error > 0) {
-                    $(this).removeAttr("disabled");
-                    isconfirm = confirm("you have " + error + " item not selected");
-                }
-            }
-           
-            if (isconfirm)
-            {
-                $http.post("/Lots/wafer/PEQADispose?" + $("#frmQuery").serialize()).success(function (res) {
-                    if (res.suc > 0) {
-                       alert("success");
-                       LoadAllWafer(currentPage - 1);
-                    } else {
-                        alert("fail");
-                    }
-                });
-            }
+            });
+
             $(this).removeAttr("disabled");
         });
     });

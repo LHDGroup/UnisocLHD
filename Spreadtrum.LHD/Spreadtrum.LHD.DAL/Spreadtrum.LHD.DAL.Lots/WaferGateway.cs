@@ -32,7 +32,10 @@ namespace Spreadtrum.LHD.DAL.Lots
                 orderExpression = new OrderExpression(query.OrderBy, query.OrderDesc);
                // orderList.Add(query.OrderBy);
             }
-            orderExpression = new OrderExpression("WaferID", false);
+            if (!string.IsNullOrEmpty(query.TransformID))
+            {
+                orderExpression = new OrderExpression("WaferID", false);
+            }
             // orderList.Add("WaferID");
             return this.dbGateway.getRecords(pageIndex, pageSize, conditions, orderExpression, null, Connector.AND, out recoedCount);
         }
@@ -128,7 +131,11 @@ namespace Spreadtrum.LHD.DAL.Lots
                     conditions.ConditionExpressions.Add(new Condition("CompletionDate", Operator.Between, str_startTime, dt.ToShortDateString()));
                 }
             }
-           
+            if (!StringHelper.isNullOrEmpty(query.CreateDate))
+            {
+                string[] dateArray = query.CreateDate.Split('-');
+                conditions.ConditionExpressions.Add(new Condition("CreateDate", Operator.Between, dateArray[0], dateArray[1] + " 23:59:59"));
+            }
             conditions.Connector = Connector.AND;
             return conditions;
         }
@@ -369,47 +376,78 @@ namespace Spreadtrum.LHD.DAL.Lots
                 status = (int)WaferStatus.WaitPE;
             }
             #endregion
+
             if (rule == 1) // PE 或QA dispose
             {
-                //wafer sprd==PE/QA dispose
-                sprddispose = dispose;
-                #region //根据sprd查询feedback
-                sql = "select top 1 FeedBack from WAFE_STATUS_LIST where SprdDecision=" + sprddispose;
-                dt = this.dbGateway.getDataTableBySqlStatement(sql);
-                if (dt != null && dt.Rows.Count > 0)
-                {
-                    feedBack = bool.Parse(dt.Rows[0]["FeedBack"].ToString());
-                    if (feedBack) status = (int)WaferStatus.WaitVendor;
-                    else status = (int)WaferStatus.WaitPE;
+                if (!iswafer)
+                { 
+                    //wafer sprd==PE/QA dispose
+                    sprddispose = dispose;
+                    #region //根据sprd查询feedback
+                    sql = "select top 1 FeedBack from WAFE_STATUS_LIST where SprdDecision=" + sprddispose;
+                    dt = this.dbGateway.getDataTableBySqlStatement(sql);
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        feedBack = bool.Parse(dt.Rows[0]["FeedBack"].ToString());
+                        if (feedBack) status = (int)WaferStatus.WaitVendor;
+                        else status = (int)WaferStatus.WaitPE;
+                    }
+                    #endregion
                 }
-                #endregion
                 #region 数据处理
                 foreach (string s in waferids)
                 {
                     if (iswafer)
                     {
-                        strcomment = req.QueryString["petxtcomment_" + s];// comment == null ? "" : comment[i];
+                        //wafer sprd==PE/QA dispose
+                        sprddispose = int.Parse(s.Split(';')[1]);
+                        string id = s.Split(';')[0];
+                        #region //根据sprd查询feedback
+                        sql = "select top 1 FeedBack from WAFE_STATUS_LIST where SprdDecision=" + sprddispose;
+                        dt = this.dbGateway.getDataTableBySqlStatement(sql);
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            feedBack = bool.Parse(dt.Rows[0]["FeedBack"].ToString());
+                            if (feedBack) status = (int)WaferStatus.WaitVendor;
+                            else status = (int)WaferStatus.WaitPE;
+                        }
+                        #endregion
+
+                        if (feedBack)
+                        {
+                            if (!arrayList.Contains(lotid))
+                            {
+                                arrayList.Add(lotid);
+                            }
+                        }
+
+                        strcomment = req.QueryString["petxtcomment_" + id];// comment == null ? "" : comment[i];
                         if (type == 2)
                         {
-                            strcomment = req.QueryString["qatxtcomment_" + s];
+                            strcomment = req.QueryString["qatxtcomment_" + id];
                         }
                         lotid = lotids == null ? "" : lotids[i];
+                        suc += UpdateWafer(updatecolumn, sprddispose, updatedescolumn, updatecomment, strcomment, status, sprddispose, id, lotid, userName, false);
                     }
-                    
-                    if (feedBack)
+                    else
                     {
-                        if (!arrayList.Contains(lotid))
+
+                        if (feedBack)
                         {
-                            arrayList.Add(lotid);
+                            if (!arrayList.Contains(lotid))
+                            {
+                                arrayList.Add(lotid);
+                            }
                         }
+                        suc += UpdateWafer(updatecolumn, dispose, updatedescolumn, updatecomment, strcomment, status, sprddispose, s, lotid, userName, false);
                     }
-                    suc += UpdateWafer(updatecolumn, dispose, updatedescolumn, updatecomment, strcomment, status, sprddispose, s, lotid, userName, false);
                     i++;
                 }
                 #endregion
             }
             else
-            { //PE和QA dispose
+            { 
+                //PE和QA dispose
                 int pedispose = 0;
                 int qadispose = 0;
                 bool isfeedback = false;

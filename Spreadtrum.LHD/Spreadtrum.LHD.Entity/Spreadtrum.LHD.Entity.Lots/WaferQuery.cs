@@ -28,6 +28,8 @@ namespace Spreadtrum.LHD.Entity.Lots
         private string orderBy = string.Empty;
         private bool orderDesc = false;
         private int lastDays = 1;
+        private string createDate = string.Empty;
+
         public string SearchType
         {
             get
@@ -288,6 +290,19 @@ namespace Spreadtrum.LHD.Entity.Lots
             set
             {
                 vendorComment = value;
+            }
+        }
+
+        public string CreateDate
+        {
+            get
+            {
+                return createDate;
+            }
+
+            set
+            {
+                createDate = value;
             }
         }
     }

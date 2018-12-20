@@ -24,6 +24,7 @@ namespace Spreadtrum.LHD.Business
 
         public int UpdateWaferStatus(HttpRequestBase req, int type, string userName)
         {
+            bool isWaferOperation = string.IsNullOrEmpty(req.QueryString["TransformID"]);
             Dictionary<int,ArrayList> dic=this.way.UpdateWaferStatus(req, type, userName);
             int suc = 0;
             int dispose = StringHelper.isNullOrEmpty(req.QueryString["HidStatus"]) ? 0 : int.Parse(req.QueryString["HidStatus"]);
@@ -37,7 +38,7 @@ namespace Spreadtrum.LHD.Business
                         foreach (string s in array)
                         {
                             Lot_Transformed lot = this.lotWay.GetTransformById(s);
-                            if (type != 3 && lot != null)
+                            if (type != 3 && lot != null && !isWaferOperation)
                             {
                                 //发邮件
                                 NotificationService.CreateCpOSATConfirmNotificationsWhilePeDispose(lot.Vendor, lot, "test", dispose);
