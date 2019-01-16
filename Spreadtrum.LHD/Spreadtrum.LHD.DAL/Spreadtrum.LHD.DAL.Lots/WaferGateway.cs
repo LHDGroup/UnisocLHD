@@ -617,7 +617,7 @@ namespace Spreadtrum.LHD.DAL.Lots
         }
         private int GetWaferCountNoSplitByLotId(string lotid)
         {
-            string sql = "select ID from vw_Wafers where TransformID='" + lotid + "' and SPRDDecision!=" + (int)WaferSelection.Split;
+            string sql = "select ID from vw_Wafers where TransformID='" + lotid + "' and SPRDDecision not in (" + (int)WaferSelection.Split + "," + (int) WaferSelection.Ink + ")";
             int count = this.dbGateway.GetRecordCountBySQLStatement(sql);
             return count;
         }

@@ -232,7 +232,7 @@ namespace Spreadtrum.LHD.Business
                 lot.OperatorStatus = (int)OperationStatus.Hold;
             }
             lot.RecordType = "Record";
-            lot.VersionID = 0;
+            lot.VersionID = 1;
             lot.Program = obj["programName"] != null ? obj["programName"].ToString() : "";
             if (obj["startTime"] != null)
             {

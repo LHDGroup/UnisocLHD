@@ -214,6 +214,7 @@
                                             <th id="thYield" data-orderby="Yield" data-desc="true" class="p8">Yield<span></span></th>
                                             <th id="thCompletionDate" data-orderby="CompletionDate" data-desc="true" style="width:12px;">Completion Date<span></span></th>
                                             <th id="thCreateDate" data-orderby="CreateDate" data-desc="true" style="width:12px;">CreateDate<span></span></th>
+                                            <th class="p8">Judgement Count</th>
                                         </tr>
                                         <tr class="collapse" id="QueryTr">
                                             <td></td>
@@ -223,13 +224,13 @@
                                                 <select id="txtOsat" name="Osat" class="p80">
                                                     <option selected value="">&nbsp;</option>
                                                     @{
-                                                    foreach (Vendors item in Model)
-                                                    {
-                                                <option value="@item.VendorID">@item.VendorName</option>
-                                                    }
+                foreach (Vendors item in Model)
+                {
+                                        <option value="@item.VendorID">@item.VendorName</option>
+}
                                                     }
                                                     @*<option value="Amkor">Amkor</option>
-                                                        <option value="SCC">SCC</option>*@
+                <option value="SCC">SCC</option>*@
                                                 </select>
                                                 @*<input id="textVendorID" name="VendorID" type="text" class="p80" />*@
                                             </td>
@@ -245,21 +246,22 @@
                                                     <option value="@((int)WaferStatus.WaitVendor)">Wait Vendor</option>
                                                     <option value="@((int)WaferStatus.WaitPEVendor)">Wait PE&Vendor</option>
                                                     @if (ViewData["outClose"] != null)
-                                                {
-                                                    if (int.Parse(ViewData["outClose"].ToString())<=0)
-                                                    {
-                                                      <option value="@((int)WaferStatus.Close)">Close</option>
+            {
+                if (int.Parse(ViewData["outClose"].ToString()) <= 0)
+                {
+                                        <option value="@((int)WaferStatus.Close)">Close</option>
 
-                                                    }
-                                                }
+}
+}
 
                                                 </select>
                                             </td>
-                                            <td style="width:7%;"><input id="textHoldReason" name="HoldReason" type="text"  /></td>
+                                            <td style="width:7%;"><input id="textHoldReason" name="HoldReason" type="text" /></td>
                                             <td class="p8"><input id="textWfCount" name="WfCount" type="text" class="p80" /></td>
                                             <td class="p8"><input id="textYield" name="Yield" type="text" class="p80" /></td>
-                                            <td><input id="textCompletionDate" class="inpudate" name="CompletionDate" type="text" style="width:80%"/>@*<span class="input-group-addon clearBtns" id="clearx">x</span>@*—<input id="textEndDate" class="inpudate" name="EndDate"  type="text" style="width:40%" />*@</td>
+                                            <td><input id="textCompletionDate" class="inpudate" name="CompletionDate" type="text" style="width:80%" />@*<span class="input-group-addon clearBtns" id="clearx">x</span>@*—<input id="textEndDate" class="inpudate" name="EndDate"  type="text" style="width:40%" />*@</td>
                                             <td><input id="textCreateDate" class="inpudate" name="CreateDate" type="text" style="width:80%" /></td>
+                                            <th class="p8">Judgement Count</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -279,6 +281,7 @@
                                             <td>{{u.Yield|number:2}}%</td>
                                             <td ng-class="TdClass(u.CompletionDate,u.OperatorStatus,u.dayCount)">{{u.CompletionDate|date:'yyyy/MM/dd'}}</td>
                                             <td ng-class="TdClass(u.CreateDate,u.OperatorStatus,u.dayCount)">{{u.CreateDate|date:'yyyy/MM/dd'}}</td>
+                                            <td>{{u.VersionID}}</td>
                                         </tr>
                                         <tr id="loadingLots">
                                             <td colspan="45" style="text-align:left">

@@ -9,4 +9,5 @@
   <field name="WfCount" exportTo="Wf_Count" CellType="intCell" />
   <field name="Yield" exportTo="Yield" CellType="pctCell" />
   <field name="CompletionDate" exportTo="Completion Date" CellType="dateCell" />
+  <field name="CreateDate" exportTo="Create Date" CellType="dateCell" />
 </table>

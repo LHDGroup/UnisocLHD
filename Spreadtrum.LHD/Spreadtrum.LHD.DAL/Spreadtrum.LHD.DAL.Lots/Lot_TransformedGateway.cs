@@ -155,8 +155,9 @@ namespace Spreadtrum.LHD.DAL.Lots
             Lot_Transformed currentEntity = this.dbGateway.getRecord(conditions);
             if (currentEntity != null)
             {
+                lot.Status = (int)WaferStatus.WaitPE;
+                lot.VersionID = currentEntity.VersionID + 1;
                 this.dbGateway.AddNew(lot);
-                currentEntity.VersionID = currentEntity.VersionID + 1;
                 currentEntity.RecordType = "History";
                 this.dbGateway.UpdateByFieldValue("ID", currentEntity.ID, currentEntity);
             }

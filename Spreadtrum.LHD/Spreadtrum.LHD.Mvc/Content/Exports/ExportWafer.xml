@@ -12,4 +12,5 @@
   <field name="PEDisposeText" exportTo="PE Dispose" CellType="strCell" />
   <field name="PEComment" exportTo="PE Comment" CellType="strCell" />
   <field name="VendorComment" exportTo="Vender Comment" CellType="strCell" />
+  <field name="CreateDate" exportTo="Create Date" CellType="dateCell" />
 </table>
